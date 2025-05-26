@@ -8,9 +8,10 @@ library(readxl)
 data <- read_excel("Desktop/Nicolas Paget/data_paper_Project/2023-10-26-BASE-FINALE-Benin.xlsx")
 View(data)
 
-filtered_data <- data %>%
+socio_economic_data <- data %>%
     select(
-      department="Departement",	
+      department="Departement",
+      commune="Commune",
       locality_type="Type de localité",	
       gender="Sexe de l’enquêté",	
       age="Age de l’enquêté",	
@@ -18,10 +19,13 @@ filtered_data <- data %>%
       sim_card_count="SIM",	
       education_level="Niveau-instruction",	
       marital_status="Situation matrimoniale",	
-      household_size="Taille de votre ménage",	
-      
-      
-      # Economic Activities and Agriculture
+      household_size="Taille de votre ménage"	
+    )
+
+
+# Economic Activities and Agriculture
+activitie_agri_data <- data %>%
+    select(
       main_activity_time="Quelle est votre activité principale en terme de temps alloué",	
       main_activity_income="Quelle est votre activité principale en terme de revenu",	
       agri_activity_market_gardening="Quelles sont vos principales activités agricoles ?/Culture maraîchère",	
@@ -39,9 +43,13 @@ filtered_data <- data %>%
       income_contrib_fishing="Contribution au revenu annuel/ Pêche (%)",	
       income_contrib_agri_trade="Contribution au revenu annuel/ Commerce de produit agricole (%)",	
       income_contrib_other_agri="Contribution au revenu annuel/ autre activité agricole  (%)",	
-      income_contrib_extra_agri="Contribution au revenu annuel/ autre activité extra agricole  (%)",	
+      income_contrib_extra_agri="Contribution au revenu annuel/ autre activité extra agricole  (%)"	
       
+      )
+
       # Languages
+languages_data <- data %>%
+    select(
       lang_eng="Quelle langue pratiquez-vous ?/Anglais",
       lang_adja="Quelle langue pratiquez-vous ?/Adja",
       lang_aizo="Quelle langue pratiquez-vous ?/Aïzo",
@@ -70,9 +78,13 @@ filtered_data <- data %>%
       lang_fr_spoken="Compétences langues : Français/Parlé",
       lang_fr_understood="Compétences langues : Français/Compris",
       lang_fr_read="Compétences langues : Français/Lu",
-      lang_fr_wrtitten="Compétences langues : Français/Ecrit",
-      
+      lang_fr_wrtitten="Compétences langues : Français/Ecrit"
+    )
+
+
       #Producer Organizations and Other Structures
+org_struct_data <- data %>%
+    select(
       member_producer_org="Appartenez-vous à une/ou plusieurs organisation (s) de producteurs ?",
       num_producer_orgs="A combien organisation (s) de producteurs de producteurs appartenez-vous ?",
       experience_other_structure="Avez-vous une expérience de travail avec des structures autres qu’une organisation/coopérative ?",
@@ -83,9 +95,12 @@ filtered_data <- data %>%
       structure_project="Quelles structures ?/Projets",
       structure_sfd="Quelles structures ?/SFD",
       structure_gov="Quelles structures ?/Structures d'Etats",
-      structure_other="Quelles structures ?/Autres",
-      
+      structure_other="Quelles structures ?/Autres"
+    )
+
       #Digital platforms
+digital_platform_data <- data %>%
+    select(
       platform_family="ZK-Etes-vous intégrés dans des plateformes numériques  familiale ?",	
       platform_friend="ZK-Etes-vous intégrés dans des plateformes numériques  amicale ?",	
       platform_1_integrated="NN-1",	
@@ -123,9 +138,13 @@ filtered_data <- data %>%
       uses_whatsapp="ZA-WHATSAPP",	
       uses_facebook="ZA-Facebook/Messenger",	
       uses_google="ZA-Google",	
-      uses_no_network="Aucun réseau",	
+      uses_no_network="Aucun réseau"
+    )
+
       
       # Crop Names
+crop_data <- data %>%
+    select(
       crop_tomato="nom de la culture/Tomate",
       crop_carrot="nom de la culture/Carotte",
       crop_lettuce="nom de la culture/Laitue",
@@ -140,9 +159,14 @@ filtered_data <- data %>%
       crop_crincrin="nom de la culture/Crincrin",
       crop_vernonia="nom de la culture/vernonia",
       crop_other="nom de la culture/Autre",
-      cost_simple_phone="BB-Cout-telephone-simple",
-      
+      cost_simple_phone="BB-Cout-telephone-simple"
+    )
+
+
       # Phone Usage
+
+usage_data <- data %>%
+    select(
       android="ANDROID",
       phone_type="Type terminal",
       use_tool_phone="Téléphone portable",
@@ -192,10 +216,13 @@ filtered_data <- data %>%
       knowledge_use_acces_youtube_search="Si oui, comment accédez-vous à ces connaissances ? via/Recherche sur Youtube",
       knowledge_use_acces_internet_search="Si oui, comment accédez-vous à ces connaissances ? via/Recherche sur Internet",
       knowledge_use_acces_sd_card="Si oui, comment accédez-vous à ces connaissances ? via/Achat des cartes SD préremplies",
-      knowledge_use_acces_bluetooth="Si oui, comment accédez-vous à ces connaissances ? via/Transfert des fichiers via Bluetooth",
+      knowledge_use_acces_bluetooth="Si oui, comment accédez-vous à ces connaissances ? via/Transfert des fichiers via Bluetooth"
+    )
       
       
       # Capacities
+capacities_data <- data %>%
+    select(
       cap__call_sms="BC-capacite-Passer des appels, envoyer des SMS",
       cap_call_sms_gardener="Si Passer des appels, envoyer des SMS, à qui?/Maraîcher",
       cap_call_sms_supplier="Si Passer des appels, envoyer des SMS, à qui?/Fournisseur d’intrant",
@@ -292,8 +319,17 @@ filtered_data <- data %>%
       cap_recruit_rent_machine_rental="Si Recruter de la main d’œuvre / louer du matériel , (quel type de main d'oeuvre et/ou quel type de matériel)/Location de machines",
       cap_sell_product_online="BC-Savez-vous ? Vendre des produits",
       cap_install_app="BC-Savez-vous ? Installer des applications",
-      cap_write_mail="BC-Savez-vous ? Ecrire un email",
+      cap_write_mail="BC-Savez-vous ? Ecrire un email"
 
     )
+
 # Save the filtered data
-write_rds(filtered_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data.rds")
+write_rds(activitie_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activitie_agri_data.rds")
+write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
+write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
+write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
+write_rds(org_struct_data , "Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data .rds")
+write_rds(digital_platform_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
+write_rds(usage_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_data.rds")
+write_rds(crop_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
+write_rds(capacities_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
