@@ -31,6 +31,23 @@ view(languages_data)
 
 # Socio Economic data
 socio_economic_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
+socio_economic_data <- socio_economic_data %>%
+  mutate(across(where(is.character), ~ case_when(
+    . == "Oui" ~ "1",
+    . == "Non" ~ "0",
+    . == "Féminin" ~ "Woman",
+    . == "Masculin" ~ "Man",
+    . == "Alphabétisé" ~ "Literate",
+    . == "Aucune éducation formelle" ~ "No formal education",
+    . == "Ecole coranique" ~ "Quranic school",
+    . == "Primaire" ~ "Primary school",
+    . == "Secondaire second cycle" ~ "Secondary school",
+    . == "Universitaire" ~ "High education or higher",
+    . == "secondaire premier cycle" ~ "Secondary school",
+    TRUE ~ .
+  )))
+socio_economic_data <- socio_economic_data %>%
+  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
 socio_economic_data[is.na(socio_economic_data)] <- 0
 view(socio_economic_data)
 
