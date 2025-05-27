@@ -23,7 +23,15 @@ view(org_struct_data)
 
 # Digital platforms
 digital_platform_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
-digital_platform_data[is.na(digital_platform_data)] <- 0
+digital_platform_data <- digital_platform_data %>%
+  mutate(across(where(is.character), ~ case_when(
+    . == "Oui" ~ "1",
+    . == "Non" ~ "0",
+    TRUE ~ .
+  )))
+digital_platform_data[is.na(digital_platform_data)] <- "0"
+digital_platform_data <- digital_platform_data %>%
+  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
 view(digital_platform_data)
 
 # Phone Usage
@@ -58,3 +66,33 @@ capacities_data <- capacities_data %>%
   mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
 capacities_data[is.na(capacities_data)] <- 0
 view(capacities_data)
+
+#Access data
+access_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
+access_data <- access_data %>%
+  mutate(across(where(is.character), ~ case_when(
+    . == "Oui" ~ "1",
+    . == "Non" ~ "0",
+    . == "Domestique individuel" ~ "Domestic individual",
+    . == "Domestique en branchement commun" ~ "Shared utility connection",
+    . == "Point de recharge communautaire" ~ "Community charging station",
+    . == "Panneaux solaire" ~ "Solar panels",
+    . == "Aucun" ~ "None",
+    . == "Groupe électrogène" ~ "Power generator",
+    . == "Bon réseau" ~ "Good network",
+    . == "Réseau faible" ~ "Weak network",
+    . == "Réseau moyen" ~ "Average network",
+    . == "Réseau très faible" ~ "Very weak network",
+    . == "Très bon réseau" ~ "Very good network",
+    . == "Quotidienne" ~ "Daily",
+    . == "Plus rarement" ~ "More rarely",
+    . == "Mensuelle" ~ "Monthly",
+    . == "Hebdomadaire" ~ "Weekly",
+    TRUE ~ .
+  )))
+access_data <- access_data%>%
+  mutate(across(where(is.numeric), ~ replace_na(., 0))) %>%
+  mutate(across(where(is.character), ~ replace_na(., "0")))
+access_data <- access_data %>%
+  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
+view(access_data)
