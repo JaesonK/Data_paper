@@ -2,9 +2,27 @@
 # Convert Oui/Non into O/1 and fill NA with 0 
 
 #Economic Activities and Agriculture
-activitie_agri_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/activitie_agri_data.rds")
-view(activitie_agri_data)
-activitie_agri_data[is.na(activitie_agri_data)] <- 0
+activity_agri_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
+activity_agri_data <- activity_agri_data %>%
+  mutate(across(where(is.character), ~ case_when(
+    . == "Élevage" ~ "Farming",
+    . == "Commercialisation  de divers articles" ~ "Marketing of various products",
+    . == "Conducteur de moto/ tricycle" ~ "Motorcycle/Tricycle Driver",
+    . == "Fonctionnaire d’Etat/d’entreprise privée/ONG" ~ "0",
+    . == "Transformation de produits agricoles" ~ "Processing of agricultural products",
+    . == "Artisanat" ~ "Craftsmanship",
+    . == "Commercialisation des produits agricoles" ~ "Marketing of agricultural products",
+    . == "Conducteur de voiture" ~ "Driver",
+    . == "Pêche" ~ "Fishing",
+    TRUE ~ .
+  )))
+activity_agri_data <- activity_agri_data %>%
+  mutate(across(where(is.numeric), ~ replace_na(., 0))) %>%
+  mutate(across(where(is.character), ~ replace_na(., "0")))
+activity_agri_data <- activity_agri_data %>%
+  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
+view(activity_agri_data)
+
 
 #Languages data
 languages_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
@@ -18,6 +36,14 @@ view(socio_economic_data)
 
 #Producer Organizations and Other Structures
 org_struct_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data.rds")
+org_struct_data <- org_struct_data %>%
+  mutate(across(where(is.character), ~ case_when(
+    . == "Oui" ~ "1",
+    . == "Non" ~ "0",
+    TRUE ~ .
+  )))
+org_struct_data <- org_struct_data %>%
+  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
 org_struct_data[is.na(org_struct_data)] <- 0
 view(org_struct_data)
 
@@ -96,3 +122,14 @@ access_data <- access_data%>%
 access_data <- access_data %>%
   mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
 view(access_data)
+
+# Save the cleaned data
+write_rds(activitie_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activitie_agri_data.rds")
+write_rds(access_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
+write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
+write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
+write_rds(org_struct_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data.rds")
+write_rds(digital_platform_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
+write_rds(usage_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_data.rds")
+write_rds(crop_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
+write_rds(capacities_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
