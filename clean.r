@@ -35,6 +35,12 @@ socio_economic_data <- socio_economic_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Oui" ~ "1",
     . == "Non" ~ "0",
+    . == "Ville" ~ "Urban",
+    . == "Village" ~ "Rural",
+    . == "Campement" ~ "Rural",
+    . == "Marié (e)" ~ "Married",
+    . == "Veuf/Veuve" ~ "Widow",
+    . == "Célibataire" ~ "Not married",
     . == "Féminin" ~ "Woman",
     . == "Masculin" ~ "Man",
     . == "Alphabétisé" ~ "Literate",
@@ -121,6 +127,8 @@ access_data <- access_data %>%
     . == "Point de recharge communautaire" ~ "Community charging station",
     . == "Panneaux solaire" ~ "Solar panels",
     . == "Aucun" ~ "None",
+    . == "Smartphone/Androïd" ~ "Smartphone",
+    . == "Téléphone simple" ~ "Simple phone",
     . == "Groupe électrogène" ~ "Power generator",
     . == "Bon réseau" ~ "Good network",
     . == "Réseau faible" ~ "Weak network",
@@ -131,17 +139,22 @@ access_data <- access_data %>%
     . == "Plus rarement" ~ "More rarely",
     . == "Mensuelle" ~ "Monthly",
     . == "Hebdomadaire" ~ "Weekly",
+    . == "Autres (préciser)" ~ "0",
+    . == "100 F" ~ "100",
     TRUE ~ .
   )))
 access_data <- access_data%>%
   mutate(across(where(is.numeric), ~ replace_na(., 0))) %>%
   mutate(across(where(is.character), ~ replace_na(., "0")))
 access_data <- access_data %>%
-  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
+  mutate(across(
+    where(~ is.character(.x) && all(grepl("^\\d+$", .x) | is.na(.x))), 
+    as.numeric
+  ))
 view(access_data)
 
 # Save the cleaned data
-write_rds(activitie_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activitie_agri_data.rds")
+write_rds(activity_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
 write_rds(access_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
 write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
 write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")

@@ -1,8 +1,8 @@
 
 
-library(tidyverse) # For data manipulation (dplyr, readr, ggplot2, etc.)
-library(janitor)   # For cleaning column names
-library(dplyr)     # For quick summary statistics
+library(tidyverse) 
+library(janitor)   
+library(dplyr)     
 library(readxl)
 
 data <- read_excel("Desktop/Nicolas Paget/data_paper_Project/2023-10-26-BASE-FINALE-Benin.xlsx")
@@ -11,21 +11,19 @@ View(data)
 socio_economic_data <- data %>%
     select(
       id = "_id",
-      department="Departement",
-      commune="Commune",
-      locality_type="Type de localité",	
-      gender="Sexe de l’enquêté",	
-      age="Age de l’enquêté",	
-      has_own_phone="Disposez-vous d'un  numéro de téléphone qui vous appartient ?",	
-      sim_card_count="SIM",	
-      education_level="Niveau-instruction",	
-      marital_status="Situation matrimoniale",	
-      household_size="Taille de votre ménage"	
+      demo_department="Departement",
+      demo_commune="Commune",
+      demo_locality_type="Type de localité",	
+      demo_gender="Sexe de l’enquêté",	
+      demo_age="Age de l’enquêté",	
+      demo_education_level="Niveau-instruction",	
+      demo_marital_status="Situation matrimoniale",	
+      demo_household_size="Taille de votre ménage"	
     )
 
 
 # Economic Activities and Agriculture
-activitie_agri_data <- data %>%
+activity_agri_data <- data %>%
     select(
       id = "_id",
       main_activity_time="Quelle est votre activité principale en terme de temps alloué",	
@@ -53,35 +51,37 @@ activitie_agri_data <- data %>%
 languages_data <- data %>%
     select(
       id = "_id",
-      lang_eng="Quelle langue pratiquez-vous ?/Anglais",
-      lang_adja="Quelle langue pratiquez-vous ?/Adja",
-      lang_aizo="Quelle langue pratiquez-vous ?/Aïzo",
-      lang_bariba="Quelle langue pratiquez-vous ?/Bariba",
-      lang_berba="Quelle langue pratiquez-vous ?/Berba",
-      lang_dendi="Quelle langue pratiquez-vous ?/Dendi",
-      lang_djerma="Quelle langue pratiquez-vous ?/Djerma",
-      lang_fr="Quelle langue pratiquez-vous ?/Français",
-      lang_fon="Quelle langue pratiquez-vous ?/Fon",
-      lang_goun="Quelle langue pratiquez-vous ?/Goun",
-      lang_lokpa="Quelle langue pratiquez-vous ?/Lokpa-Yom",
-      lang_mahi="Quelle langue pratiquez-vous ?/Mahi",
-      lang_mina="Quelle langue pratiquez-vous ?/Mina",
-      lang_nago="Quelle langue pratiquez-vous ?/Nago",
-      lang_ditamari="Quelle langue pratiquez-vous ?/Ditamari",
-      lang_weme="Quelle langue pratiquez-vous ?/Wémè",
-      lang_peulh="Quelle langue pratiquez-vous ?/Peulh",
-      lang_torri="Quelle langue pratiquez-vous ?/Torri",
-      lang_yoruba="Quelle langue pratiquez-vous ?/Yorouba",
-      lang_wama="Quelle langue pratiquez-vous ?/Wama",
-      lang_idaatcha="Quelle langue pratiquez-vous ?/idaatcha",
-      lang_sahoue="Quelle langue pratiquez-vous ?/sahouè",
-      lang_other="Quelle langue pratiquez-vous ?/autre",
-      lang_eng_spoken="Compétences langues : Anglais/Parlé",
-      lang_eng_understood="Compétences langues : Anglais/Compris",
-      lang_fr_spoken="Compétences langues : Français/Parlé",
-      lang_fr_understood="Compétences langues : Français/Compris",
-      lang_fr_read="Compétences langues : Français/Lu",
-      lang_fr_wrtitten="Compétences langues : Français/Ecrit"
+      lang_English="Quelle langue pratiquez-vous ?/Anglais",
+      lang_Adja="Quelle langue pratiquez-vous ?/Adja",
+      lang_Aizo="Quelle langue pratiquez-vous ?/Aïzo",
+      lang_Bariba="Quelle langue pratiquez-vous ?/Bariba",
+      lang_Berba="Quelle langue pratiquez-vous ?/Berba",
+      lang_Dendi="Quelle langue pratiquez-vous ?/Dendi",
+      lang_Djerma="Quelle langue pratiquez-vous ?/Djerma",
+      lang_French="Quelle langue pratiquez-vous ?/Français",
+      lang_Fon="Quelle langue pratiquez-vous ?/Fon",
+      lang_Goun="Quelle langue pratiquez-vous ?/Goun",
+      lang_Lokpa="Quelle langue pratiquez-vous ?/Lokpa-Yom",
+      lang_Mahi="Quelle langue pratiquez-vous ?/Mahi",
+      lang_Mina="Quelle langue pratiquez-vous ?/Mina",
+      lang_Nago="Quelle langue pratiquez-vous ?/Nago",
+      lang_Ditamari="Quelle langue pratiquez-vous ?/Ditamari",
+      lang_Weme="Quelle langue pratiquez-vous ?/Wémè",
+      lang_Peulh="Quelle langue pratiquez-vous ?/Peulh",
+      lang_Torri="Quelle langue pratiquez-vous ?/Torri",
+      lang_Yoruba="Quelle langue pratiquez-vous ?/Yorouba",
+      lang_Wama="Quelle langue pratiquez-vous ?/Wama",
+      lang_Idaatcha="Quelle langue pratiquez-vous ?/idaatcha",
+      lang_Sahoue="Quelle langue pratiquez-vous ?/sahouè",
+      lang_Other="Quelle langue pratiquez-vous ?/autre",
+      lang_English_spoken="Compétences langues : Anglais/Parlé",
+      lang_English_understood="Compétences langues : Anglais/Compris",
+      lang_English_written = "Compétences langues : Anglais/Ecrit",
+      lang_English_read ="Compétences langues : Anglais/Lu",
+      lang_French_spoken="Compétences langues : Français/Parlé",
+      lang_French_understood="Compétences langues : Français/Compris",
+      lang_French_read="Compétences langues : Français/Lu",
+      lang_French_written="Compétences langues : Français/Ecrit"
     )
 
 
@@ -107,7 +107,7 @@ digital_platform_data <- data %>%
     select(
       id = "_id",
       platform_family="ZK-Etes-vous intégrés dans des plateformes numériques  familiale ?",
-      #plaform_friend="ZK-Etes-vous intégrés dans des plateformes numériques  amicale ?",
+      #platform_friend="ZK-Etes-vous intégrés dans des plateformes numériques  amicale ?",
       platform_1_integrated="NN-1",	
       platform_2_integrated="NN-2",	
       platform_3_integrated="NN-3",	
@@ -200,6 +200,7 @@ usage_data <- data %>%
       usage_photos_collector="Si Envoyer une photo, à qui?/Collecteur",
       usage_photos_consumer="Si Envoyer une photo, à qui?/Consommateur",
       usage_photos_advisor_agri="Si Envoyer une photo, à qui?/Technicien / conseiller agricole",
+      usage_photos_employee="Si Envoyer une photo, à qui?/Gestionnaire de l'exploitation/employé",
       usage_photos_agent_atda="Si Envoyer une photo, à qui?/Agent d’ATDA",
       usage_photos_agent_ddaep="Si Envoyer une photo, à qui?/Agent du DDAEP",
       usage_photos_colleague="Si Envoyer une photo, à qui?/Collègue d’une autre organisation paysanne",
@@ -280,65 +281,56 @@ access_data <- data %>%
     select(
       id = "_id",
       access_android="ANDROID",
-      access_phone_type="Type terminal",
+      access_has_own_phone="Disposez-vous d'un  numéro de téléphone qui vous appartient ?",
+      access_phone_type="Quelles sont les caractéristiques de votre (vos) téléphone(s) actuel(s) ?",
       access_no_digital="Aucun",
       access_phone="Téléphone portable",
       access_tablet="Tablette",
       access_laptop="Ordinateur",
       access_spotlight="Projecteur",
       access_drone="Drone",
-      access_first_year_phone="Si téléphone portable, en quelle année avez-vous acquis ou eu votre premier téléphone ?",
-      access_first_phone_cost="Si téléphone portable, combien avait-il coûté ?",
-      access_current_phone_year="Quand avez-vous acheté ou eu le téléphone que vous possédez actuellement ? (Année)",
+      access_sim_card_count="SIM",	
       access_current_phone_cost="Combien avait-il couté?",
       access_simple_phone_cost="BB-Cout-telephone-simple",
+      access_no_phone_interdiction = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/C’est un interdit pour les femmes dans notre milieu",
+      access_no_phone_husband = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je ne peux pas l’avoir sans l’autorisation de mon mari",
+      access_no_phone_cultur = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/C’est mal vu dans notre communauté qu’une femme au foyer dispose de téléphone",
+      access_no_phone_child = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je peux y accéder par mon enfant",
+      access_no_phone_illiterate = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je suis analphabète",
+      access_no_phone_satisfaction = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Il n’existe pas de services numériques qui répondent à mes attentes",
+      access_no_phone_internet = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je ne peux pas accéder au réseau internet",
+      access_no_phone_network = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je ne peux pas accéder au réseau téléphonique",
+      access_no_phone_electricity = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je ne peux pas le charger (électricité)",
+      access_no_phone_money = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je n’ai pas les moyens",
+      access_no_phone_usage = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je ne sais pas comment ça fonctionne",
+      access_nà_phone_friend = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je peux y accéder par un ami/ proche (solaire, cabine dans le village)",
+      access_no_phone_danger = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je pense que c’est dangereux (internet est plein de fausses informations)",
+      access_no_phone_desire ="Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je n’en ai pas envie",
+      access_no_phone_time = "Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je n’ai pas le temps",
+      access_no_phone_need ="Si oui (il/elle peut rester sans téléphone portable) Pourquoi ?/Je n’en ai pas besoin",
       access_num_phone_purchased="Pouvez-vous nous dire combien de téléphones vous avez achetés ?",
       access_electricity_source="FF- Quelle est la voie d‘accès à l’électricité du ménage",
-      access_neighbor_phone_charge="Si aucun, vous arrive-t-il de faire recharger votre téléphone dans une autre localité ?",
-      access_neighbor_distance="Si aucun, à quelle distance se situe la localité la plus proche dotée en énergie ?  en km",
       access_electricity_production="FF- Quel est le mode de production de l’électricité ?",
       access_network_mtn="Quel réseau téléphonique fonctionne dans la localité ?/MTN",
       access_network_moov="Quel réseau téléphonique fonctionne dans la localité ?/Moov",
       access_network_sbin="Quel réseau téléphonique fonctionne dans la localité ?/SBIN",
       access_network_isocel="Quel réseau téléphonique fonctionne dans la localité ?/Isocel",
-      access_network_none_beninese="Quel réseau téléphonique fonctionne dans la localité ?/Aucun réseau Béninois",
       access_network_none="Quel réseau téléphonique fonctionne dans la localité ?/Aucun",
       access_quality_mtn="Si MTN, sur une échelle de 1 à 5 comment évaluez-vous l’intensité de la couverture du réseau MTN (Très bon réseau = 5, Bon réseau = 4, Réseau moyen = 3, Réseau faible = 2, Réseau très faible = 1)",
-      access_perception_mtn="Perception-MTN",
-      access_perception_moov="Perception-MOOV",
       access_quality_moov="Si Moov, sur une échelle de 1 à 3 comment évaluez-vous l’intensité de la couverture du réseau Moov (Très bon réseau = 5, Bon réseau = 4, Réseau moyen = 3, Réseau faible = 2, Réseau très faible = 1)",
       access_internet="1-Avez-vous accès à internet (au village) ?",
       access_internet_debit="Si oui, quelle technologie d’accès",
       access_internet_quality="Evaluation-Qualite-Internet",
-      access_internet_home="Si oui, où pouvez-vous vous connecter à internet ?/Chez moi",
-      access_internet_elsewhere="Si oui, où pouvez-vous vous connecter à internet ?/Ailleurs au village",
-      access_internet_field="Si oui, où pouvez-vous vous connecter à internet ?/Au champ",
-      access_internet_market="Si oui, où pouvez-vous vous connecter à internet ?/Au marché",
-      access_internet_city="Si oui, où pouvez-vous vous connecter à internet ?/J’attends d’arriver en ville",
-      access_internet_where_possible="Si oui, où pouvez-vous vous connecter à internet ?/Je me rends régulièrement dans une localité d’où il est possible de se connecter",
-      access_internet_other="Si oui, où pouvez-vous vous connecter à internet ?/Autres",
-      access_recharge_internet_credit="Comment rechargez-vous votre internet ?/Crédit",
-      access_recharge_internet_package="Comment rechargez-vous votre internet ?/Forfait",
-      access_recharge_internet_other="Comment rechargez-vous votre internet ?/Autre (préciser)",
       access_recharge_internet_freq="A quelle fréquence vous rechargez-vous en (data) internet ?",
       access_recharge_internet_budget="BE-Quel est votre budget estimatif hebdomadaire de recharge internet ?",
-      access_recharge_com_credit="Comment rechargez-vous votre téléphone pour communiquer ?/Crédit",
-      access_recharge_com_package="Comment rechargez-vous votre téléphone pour communiquer ?/Forfait",
-      access_recharge_com_other="Comment rechargez-vous votre téléphone pour communiquer ?/Autre (préciser)",
       access_recharge_com_freq="A quelle fréquence vous rechargez-vous en crédit de communication ?",
       access_recharge_com_budget="BE-Quel est votre budget estimatif hebdomadaire de crédit de communication ?",
       access_recharge_service="Avez-vous accès aux services de recharge de crédit ou forfait de communication dans votre village ou localité ?",
       access_recharge_service_momo="Si oui, lesquels/par Momo",
-      access_recharge_service_point="Si oui, lesquels/dans un point de recharge",
+      access_recharge_service_kiosk="Si oui, lesquels/dans un point de recharge",
       access_recharge_service_market="Si oui, lesquels/dans un commerce",
       access_recharge_service_other="Si oui, lesquels/Autre (à préciser)",
-      access_no_recharche_service_distance="Si non, à quelle distance se situe le village le plus proche où vous trouvez ces services ?  __km",
-      access_momo="BR-Avez-vous accès au service Momo dans votre village ou localité ?",
-      access_recharge_momo_point="Si oui, où rechargez-vous votre compte Momo ?/dans un point de recharge",
-      access_recharge_momo_market="Si oui, où rechargez-vous votre compte Momo ?/dans un commerce",
-      access_recharge_momo_other="Si oui, où rechargez-vous votre compte Momo ?/Autre (à préciser)",
-      access_no_recharge_momo_distance="Si non, à quelle distance se situe le village le plus proche où vous trouvez ce service ?"
-      
+      access_momo="BR-Avez-vous accès au service Momo dans votre village ou localité ?"
     )
 
       # Capacities
@@ -349,7 +341,6 @@ capacities_data <- data %>%
       cap_vocal="BC-Savez-vous ?  Envoyer/Ecouter un message vocal",
       cap_messages="BC-Savez-vous ? Envoyer/Lire un message écrit",
       cap_photos="BC-Savez-vous ? Envoyer/Prendre une photo",
-      cap_photos_employee="Si Envoyer une photo, à qui?/Gestionnaire de l'exploitation/employé",
       cap_videos="BC-Savez-vous ? Envoyer / Filmer une vidéo",
       cap_transfer_file="Savez-vous ?  Faire suivre des contenus (messages, audios, photos etc)",
       cap_join_group_link="BC-Savez-vous ? Intégrer des groupes à partir d’un lien / d’une invitation ?",
@@ -363,7 +354,7 @@ capacities_data <- data %>%
     )
 
 # Save the filtered data
-write_rds(activitie_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activitie_agri_data.rds")
+write_rds(activity_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
 write_rds(access_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
 write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
 write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")

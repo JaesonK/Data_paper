@@ -1,0 +1,43 @@
+
+DATA DICTIONARY – Digital Usage Dataset of Beninese Farmers
+------------------------------------------------------------
+
+Variable Name                | Section        | Definition                                                | Values / Labels                          | Unit / Format
+-----------------------------|----------------|-----------------------------------------------------------|------------------------------------------|------------------------------
+DEMO_region                  | Demographics   | Department of residence                                   | OUEME, LITTORAL, etc.                    | Categorical (text)
+DEMO_subregion               | Demographics   | Commune of residence                                      | COTONOU, PARAKOU, etc.                   | Categorical (text)
+DEMO_residence               | Demographics   | Type of living area                                       | Rural, Urban                             | Categorical
+DEMO_gender                  | Demographics   | Gender of respondent                                      | Man, Woman                               | Categorical
+DEMO_age_group               | Demographics   | Age category                                              | 14–40, 40–60, 60+                        | Categorical
+DEMO_education               | Demographics   | Highest education level completed                         | Primary, Secondary, None, etc.           | Categorical
+DEMO_marital_status          | Demographics   | Marital status                                            | Married, Not married, Widow              | Categorical
+DEMO_household_size          | Demographics   | Household size                                            | 1–5, 5–10, etc.                          | Ordinal
+languages_spoken             | Languages      | Number of languages spoken                                | 1 to >5                                  | Integer (grouped)
+language_*                   | Languages      | Binary flags for specific languages                       | 0 = No, 1 = Yes                          | Binary
+foreign_language_*           | Languages      | Ability in foreign languages (read, write, speak)         | 0 = No, 1 = Yes                          | Binary
+agri_main_activity_time      | Farming        | Main time-spent activity                                  | Agriculture, Fishing, etc.               | Categorical
+agri_main_activity_income    | Farming        | Main income activity                                      | Agriculture, Trade, etc.                 | Categorical
+crop_*                       | Farming        | Grown crop types                                          | 0 = No, 1 = Yes                          | Binary
+access_digital_*             | Access         | Digital device ownership                                  | 0 = No, 1 = Yes                          | Binary
+phone_type                   | Access         | Type of phone owned                                       | Smartphone, Feature phone, etc.          | Categorical
+phone_cost                   | Access         | Price bracket of phone                                    | 1K–10K, 10K–20K, etc.                    | Categorical
+phone_purchased_count        | Access         | Number of phones ever purchased                           | 0–10                                     | Integer
+electricity_source           | Access         | Electricity source                                        | Generator, Solar, etc.                   | Categorical
+internet_access              | Access         | Internet access                                           | 0 = No, 1 = Yes                          | Binary
+network_operator_*           | Access         | Mobile network coverage                                   | 0 = No, 1 = Yes                          | Binary
+internet_quality_*           | Access         | Quality of internet by operator                           | Weak, Average, Good, etc.                | Categorical
+recharge_frequency_internet  | Access         | Internet top-up frequency                                 | Daily, Weekly, etc.                      | Categorical
+recharge_cost_internet       | Access         | Internet cost bracket                                     | 0–500, 500–2000, etc.                    | Categorical
+capacity_*                   | Capacity       | Digital capabilities (call, sell, browse, etc.)           | 0 = No, 1 = Yes                          | Binary
+usage_application_*          | Usage          | Apps used (e.g., Mobile Money, Facebook)                  | 0 = No, 1 = Yes                          | Binary
+usage_type_*                 | Usage          | Communication modes by target (friends, coops, etc.)      | Integer count                            | Integer
+usage_finance_*              | Usage          | Use for finance (receive, send, save, borrow)             | 0 = No, 1 = Yes                          | Binary
+usage_information_*          | Usage          | Type of info looked for (climate, price, etc.)            | 0 = No, 1 = Yes                          | Binary
+usage_knowledge_*            | Usage          | Learning-related digital use                              | 0 = No, 1 = Yes                          | Binary
+usage_group_membership_*     | Usage          | Membership in digital agri groups                         | 0 = No, 1 = Yes                          | Binary
+usage_recruitment_*          | Usage          | Recruitment and income sourcing via mobile                | 0 = No, 1 = Yes                          | Binary
+
+NOTES:
+- * indicates a set of binary columns (one per modality).
+- Missing data are encoded as 0 (non-response) in binary variables.
+- Derived indicators (e.g., number of languages spoken) are computed.
