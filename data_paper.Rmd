@@ -1,0 +1,1062 @@
+---
+title: "Digital Usage Dataset of Beninese Farmers"
+author: "Jemisse Kouchade"
+date: "`r Sys.Date()`"
+output: pdf_document
+#bibliography: refs.bib
+#csl: nature.csl  # ou autre style CSL
+link-citations: yes
+fontsize: 11pt
+geometry: margin=1in
+---
+
+# 1 Abstract
+
+A representative sample of 1,500 producers was interviewed through a questionnaire using the tablet-assisted
+one-on-one interview method to assess the adoption of digital technologies among market gardening producers
+in Benin. The questionnaire was designed to measure the digital divides within these rural populations.
+Based on a classic digital divide framework, the questionnaire aims to provide information on socio-economic
+characteristics and digital uptake by populations typically characterized by low connectivity and low skills.
+The collected data can be accessed in tabular form from an open repository, allowing the current state to be
+analyzed and informing the design of future digital rural development projects.
+\par
+Keywords: on-line questionnaire, representative sample, digital appropriation, rural development, digital
+agriculture
+
+## Specification table
+
+Subject                                   | Social science
+------------------------------------------|--------------------------------------------------------------------------------
+Specific domain                           | Appropriation (motivation, access, capacities and uses) of digital technologies; small-scale producers in Benin
+Type of data                              | Table and data labels in .csv and .txt formats
+How the data were acquired                | Survey data was collected using the Kobo Toolbox survey tool
+Data format                               | Raw, Processed
+Description of data collection            | The survey was completed by 1,500 market gardeners from Benin. The sample is methodically selected and representative of these populations. Market gardeners were randomly selected using the most comprehensive and up-to-date database available in the country. Data collection took place in 2022 and 2023 through in-person interviews.
+Data source location                      | Country: Benin City/Region: Dagana and Linguère departments in Senegal, cocoa-producing areas in Côte d’Ivoire and the South Coast and peri-urban areas of major cities (main market gardening areas) in Benin
+
+## Value of the data
+- The database collects data in regions where the availability of digital data is not very accessible.
+- It surveys those most vulnerable to the digital divide.
+- It facilitates comparisons between three key value chains in West Africa.
+- The database can inform future agricultural or rural development projects and guide the design of
+public policies.
+- It is accessible to researchers, public administrators, funders, experts and development project man-
+agers.
+
+# 2 Objective
+Improved infrastructure and the proliferation of mobile phones in West Africa are driving changes and
+challenges. There is growing interest in digital technologies and drives substantial public funding, which
+fosters the promise of development. However, as digital technologies become more widespread, digital divides
+are emerging, especially in rural areas. The objective of this survey, based on a digital divide framework, is to
+collect data on market gardeners in Benin. The resulting database will provide valuable information to local
+and international researchers and officials, and guide the allocation of funds from public and international
+agencies, allowing for better targeting of the most excluded groups taking into account their access, capacity
+and use of digital technologies.
+
+# 3 Data Collection and Description
+The questionnaire was designed to assess socio-economic characteristics and the adoption of digital technolo-
+gies. Data collection took place during the first semester of 2023. These are original data collected as part
+of the ”Digital Divide” project (https://www.fracture-numerique.org/). Data collection followed the stages
+of digital adoption: motivation for adopting or not adopting digital technology, access to networks, devices,
+and mobile plans, capacities, and usage patterns, with a particular focus on professional-related activities.
+Following a pre-survey, a closed questionnaire was formalized and digitized, and it was administered and
+centralized using the KoboToolBox software. To enhance the quality and reliability of the primary survey
+data, data handling and restructuring were performed to create a cohesive database containing descriptions of
+the variables from the four main sections of the questionnaire. This survey therefore includes both structural
+data related to farmers and data on digital adoption. For the data cleaning process, missing values are replaced with 0. These correspond to questions for which respondents did not provide an answer.
+However, we note that some questions legitimately have 0 as a response — particularly binary questions such as yes/no items.
+
+\newpage
+ Table 2 : Sections of the Questionnaire used for the survey.
+
+| **Section**                       | **Description of Variables**                                                                 |
+|-----------------------------------|---------------------------------------------------------------------------------------------|
+| **1. Farmer Characterization**    | Describes ties, gender, age, ethnicity, level of education, employment status, main occupation, number of persons in the concession. |
+| **2. Physical access to digital technology** | Indicates access to digital tools, including internet and electricity for the dealership and individuals. Queries include network accessibility and individual internet usage frequency, along with monthly expenditure on plans. |
+| **3. Motivations**                | Individuals’ wishes regarding training on digital tools and digital services they would like (climate forecasting, warning services, etc.). |
+| **4. Capacities**                 | Individuals’ abilities regarding phone applications with focus on mobile money and instant messaging services. |
+| **5. Uses**                       | Details on actual use of phone applications.                                                |
+1,500 individuals were surveyed. These individuals were randomly selected from the largest database
+of market gardeners available in the country, provided by FéNOMA-Benin, the umbrella organization for
+market gardening in Benin. Utilizing this database of 13,467 market gardeners, we conducted a two-stage
+cluster sampling process: communes were selected first, followed by the selection of market gardeners within
+those communes.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(readxl)
+activity_agri_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
+capacities_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
+crop_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
+access_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
+languages_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
+usage_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_data.rds")
+digital_platform_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
+view(access_data)
+```
+
+## 3.1 Socio-demographic variables
+
+The variables describing demographics in the database begin with ”DEMO” for Demography. These variables
+characterize individuals in the database based on factors such as region, subregion, age, gender, place of
+residence, literacy, etc. These factors are typically associated with digital divides  
+
+```{r}
+socio_economic_data <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
+total <- nrow(socio_economic_data)
+kable(socio_economic_data %>%
+  group_by(demo_department) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    rename(Answers = demo_department),format = "latex", booktabs = TRUE, caption = "County of residence") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  group_by(demo_commune) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+  rename(Answers = demo_commune),format = "latex", booktabs = TRUE, caption = "Region of residence") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  group_by(demo_locality_type) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+  rename(Answers = demo_locality_type),format = "latex", booktabs = TRUE, caption = "Residence") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  group_by(demo_gender) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+  rename(Answers = demo_gender),format = "latex", booktabs = TRUE, caption = "Gender") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  mutate(age_group = cut(demo_age, breaks = c(14, 40,  60, Inf),
+                         labels = c("14–40", "40–60", "60+"))) %>%
+  group_by(age_group) %>%
+  summarise(Number = n(),
+            Proportion = round(Number / total * 100, 1))%>%
+  rename(Answers = age_group),format = "latex", booktabs = TRUE, caption = "Age") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+ordre_education <- c(
+  "High education or higher",
+  "Secondary school",
+  "Primary school",
+  "Quranic school",
+  "Literate",
+  "No formal education"
+  
+)
+
+# Appliquer l’ordre dans le pipe
+kable(socio_economic_data %>%
+  mutate(demo_education_level = factor(demo_education_level, levels = ordre_education)) %>%
+  group_by(demo_education_level) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1), 
+    .groups = "drop"
+  )%>%
+  rename(Answers = demo_education_level),format = "latex", booktabs = TRUE, caption = "Education Level") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  group_by(demo_marital_status) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+  rename(Answers = demo_marital_status),format = "latex", booktabs = TRUE, caption = "Marital status") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(socio_economic_data %>%
+  mutate(house_size = cut(demo_household_size, breaks = c(0, 5,  10, 15,Inf),
+                         labels = c("1–5", "5–10", "10-15", "15+"))) %>%
+  group_by(house_size) %>%
+  summarise(Number = n(),
+            Proportion = round(Number / total * 100, 1))%>%
+  rename(Answers = house_size),format = "latex", booktabs = TRUE, caption = "Household Size") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(languages_data %>%
+  select(starts_with("lang"),
+         -starts_with("lang_French"),
+         -starts_with("lang_English")) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(Number = sum(valeur, na.rm = TRUE), .groups = "drop")%>%
+    mutate(Answers = str_replace(variable, "lang_", "")) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Local speaking languages") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+```{r}
+kable(languages_data %>%
+  select(starts_with("lang_French_"),
+         starts_with("lang_English_"),
+         ) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(Number = sum(valeur, na.rm = TRUE), .groups = "drop")%>%
+    mutate(Answers = variable %>%
+        str_replace("lang_", "") %>%
+        str_replace_all("_", " ") %>%
+        str_to_title()) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Foreign language comprehension") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+
+# Remplace ici par le nom de tes vraies colonnes si besoin
+all_lang <- grep("^lang", names(languages_data), value = TRUE)
+
+r_lang <- c("lang_French","lang_English" )
+lang_cols <- setdiff(all_lang, r_lang)
+
+kable(languages_data %>%
+  mutate(nb_langues = rowSums(select(., all_of(lang_cols)) == 1, na.rm = TRUE)) %>%
+  mutate(Answers = case_when(
+    nb_langues == 1 ~ "1 Language",
+    nb_langues == 2 ~ "2 Languages",
+    nb_langues == 3 ~ "3 Languages",
+    nb_langues == 4 ~ "4 Languages",
+    nb_langues == 5 ~ "5 Languages",
+    nb_langues > 5  ~ "> 5 Languages",
+    TRUE ~ "Aucune"
+  )) %>%
+  count(Answers, name = "Number") %>%
+  arrange(Answers),format = "latex", booktabs = TRUE, caption = "Distribution on the speaking language") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+This variable provide the distribution of the number of local languages spoken by an individual. It is a summary of the table 11.
+
+## 3.2 Farming-related characteristics
+
+The variables related to farming activities in the database are prefixed with ‘agri’ or ‘crop’, indicating their
+relevance to agriculture. The distribution of respondents’ attitudes and characteristics concerning agricultural
+activities is presented by question below.
+
+```{r}
+kable(activity_agri_data %>%
+  group_by(main_activity_time) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+     mutate(Answers = str_replace(main_activity_time, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+    arrange(order, Answers) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "What is your main activity in terms of allocated time") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(activity_agri_data %>%
+  group_by(main_activity_income) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(main_activity_income, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+    arrange(order, Answers) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "What is your main activity in terms of income") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+replacements <- c(
+  "agri_activity_market_gardening" = "Market gardening",
+  "agri_activity_agri_processing" = "Agri processing",
+  "agri_activity_cash_crops" = "Cash crops",
+  "agri_activity_livestock" = "Livestock",
+  "agri_activity_fishing" = "Fishing",
+  "agri_activity_food_crops" = "Food crops",
+  "agri_activity_agri_trade" = "Agri trade",
+  "agri_activity_hydro_amenagement" = "Hydro-amenagement"
+  
+)
+
+kable(
+  activity_agri_data %>%
+    select(starts_with("agri")) %>%
+    pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+    group_by(variable) %>%
+    summarise(Number = sum(valeur, na.rm = TRUE)) %>%
+    mutate(
+      Answers = str_replace_all(variable, replacements),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(order, desc(Answers)) %>%
+    select(Answers, Number),
+  format = "latex",
+  booktabs = TRUE,
+  caption = "What are your main farming activities?"
+) %>%
+  kable_styling(latex_options = c("HOLD_position"), full_width = TRUE)
+```
+
+```{r}
+replacement <- c("crop_tomato"="Tomato",
+      "crop_carrot"="Carot",
+      "crop_lettuce"="Lettuce",
+      "crop_onion"="Onion",
+      "crop_basil"="Basil",
+      "crop_peper"="Peper",
+     "crop_vegetable"="Vegetable",
+      "crop_okra"="Okra",
+      "crop_cucumber"="Cucumber",
+      "crop_pigweed"="Pigweed",
+      "crop_cabbage"="Cabbage",
+      "crop_crincrin"="Crincrin",
+      "crop_vernonia"="Vernonia",
+      "crop_other"="Other")
+
+kable(crop_data %>%
+  select(starts_with("crop")) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(Number = sum(valeur, na.rm = TRUE))%>%
+    mutate(
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number),format = "latex", booktabs = TRUE, caption = "What crops do you grow?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+## Access to digital
+
+The names of the variables describing access to digital tools in the database begin with "access". The tables below provide data on access to communication technologies and electricity in Benin as well as on the purchase patterns of communication packages.
+
+```{r}
+replacement = c("access_no_digital"="No digital",
+      "access_phone"="Telephone",
+      "access_tablet"="Tablet",
+      "access_laptop"="Laptop",
+      "access_spotlight"="Spotlight",
+      "access_drone"="Drone")
+kable(access_data %>%
+  select(
+    starts_with("access_phone"),
+    starts_with("access_table"),
+    starts_with("access_laptop"),
+    starts_with("access_spotlight"),
+    starts_with("access_no_digital"),
+    -starts_with("access_phone_type")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+    mutate(
+      Proportion = round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Do you have acces to these digital tools?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  group_by(access_phone_type) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_phone_type, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+    arrange(order, Answers) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "What type of phone do you have?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("access_no_phone_interdiction" = "Interdiction",
+      "access_no_phone_husband" = "Husband autorisation",
+      "access_no_phone_cultur" = "Perception",
+      "access_no_phone_child" = "Child",
+      "access_no_phone_illiterate" = "Illiterate",
+      "access_no_phone_satisfaction" = "Satisfaction",
+      "access_no_phone_internet" = "Internet",
+      "access_no_phone_network" = "Network",
+      "access_no_phone_electricity" = "Electricity",
+      "access_no_phone_money" = "Money",
+      "access_no_phone_usage" = "Can't use",
+      "access_nà_phone_friend" = "Friend",
+      "access_no_phone_danger" = "Dangerous",
+      "access_no_phone_desire" ="Not desire",
+      "access_no_phone_time" = "Time consuming",
+      "access_no_phone_need" ="Don't need")
+kable(access_data %>%
+  select(
+    starts_with("access_no_phone")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+      Proportion = round(Number / sum(Number) * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Why don't you have phone?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+kable(access_data %>%
+  mutate(access_group = cut(access_current_phone_cost, breaks = c(1000, 10000,  20000, 30000, 50000, Inf),
+                         labels = c("1K–10K", "10K–20K", "20K-30K", "30K-50K", "50K+"))) %>%
+  group_by(access_group) %>%
+  summarise(number = n(),
+            proportion = round(number / total * 100, 1))
+  %>%
+    rename(Answers = access_group),format = "latex", booktabs = TRUE, caption = "Cost of your current phone") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  group_by(access_num_phone_purchased) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    rename(Answers = access_num_phone_purchased),format = "latex", booktabs = TRUE, caption = "Number of phone purchased") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+The question related to access to electricity is conditional on whether the respondent already owns a phone.
+```{r}
+kable(access_data %>%
+  group_by(access_electricity_source) %>%
+  summarise(
+    Number = n(),
+    proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_electricity_source, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+    arrange(order, Answers) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Electiricity source") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  group_by(access_electricity_production) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_electricity_production, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+    arrange(order, Answers) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Electricity production") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+replacement = c(access_network_mtn="MTN",
+      "access_network_moov"="Moov",
+      "access_network_sbin"="SBIN",
+      "access_network_isocel"="Isocel",
+      "access_network_none"="None")
+
+kable(access_data %>%
+  select(
+    starts_with("access_network"),
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+   mutate(
+      Proportion = round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Do you have access to network?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  group_by(access_internet) %>%
+  summarise(
+    number = n(),
+    Proportion = round(number / total * 100, 1)
+  )%>%
+    rename(Answers = access_internet),format = "latex", booktabs = TRUE, caption = "Do you have access to internet?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+order_quality <- c("Very weak network","Weak network","Average network","Good network","Very good network","0")
+
+kable(access_data %>%
+  group_by(access_internet_quality= factor(access_internet_quality, levels = order_quality)) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  ) %>%
+    mutate(Answers = str_replace(access_internet_quality, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Quality of internet") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+order_quality <- c("Very weak network","Weak network","Average network","Good network","Very good network","0")
+
+kable(access_data %>%
+  group_by(access_quality_moov= factor(access_quality_moov, levels = order_quality)) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_quality_moov, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Moov internet quality") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+order_quality <- c("Very weak network","Weak network","Average network","Good network","Very good network","0")
+
+kable(access_data %>%
+  group_by(access_quality_mtn = factor(access_quality_mtn, levels = order_quality)) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_quality_mtn, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "MTN internet quality") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+order_freq <- c("Daily", "Weekly", "Monthly", "More rarely", "0")
+
+kable(access_data %>%
+  group_by(access_recharge_internet_freq = factor(access_recharge_internet_freq, levels = order_freq)) %>%
+  summarise(
+    Number = n(),
+    proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_recharge_internet_freq, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Frequence of the internet recharge") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  mutate(Answers = cut(access_recharge_internet_budget, breaks = c(0, 500, 2000, 3000, 5000, Inf),
+                         labels = c("0–500", "500–2000", "2000-3000", "3000-5000", "5000+"))) %>%
+  group_by(Answers) %>%
+  summarise(Number = n(),
+            Proportion = round(Number / total * 100, 1)),format = "latex", booktabs = TRUE, caption = "Weekly budget for internet recharge") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+order_freq <- c("Daily", "Weekly", "Monthly", "More rarely", "0")
+
+kable(access_data %>%
+  group_by(access_recharge_com_freq = factor(access_recharge_com_freq, levels = order_freq)) %>%
+  summarise(
+    Number = n(),
+    proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_recharge_com_freq, "0", "0: No answer"),
+            order = if_else(Answers == "0: No answer", 1, 0)) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Frequence of communication recharge") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+kable(access_data %>%
+  mutate(Answers = cut(access_recharge_com_budget, breaks = c(0, 500, 2000, 3000, 5000, Inf),
+                         labels = c("0–500", "500–2000", "2000-3000", "3000-5000", "5000+"))) %>%
+  group_by(Answers) %>%
+  summarise(Number = n(),
+            Proportion = round(Number / total * 100, 1)),format = "latex", booktabs = TRUE, caption = "Weekly budget for communication") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+kable(access_data %>%
+  group_by(access_recharge_service) %>%
+  summarise(
+    Number = n(),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    mutate(Answers = str_replace(access_recharge_service, "0", "0: No answer")) %>%
+  select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Do you have access to credit top-up or communication package services in your village or locality?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+## Capacities
+
+```{r}
+replacement = c(cap_call_sms="Call/Sms",
+      cap_vocal="Vocal",
+      cap_messages="Messages",
+      cap_photos="Photos",
+      cap_videos="Videos",
+      cap_transfer_file="Transfer files",
+      cap_join_group_link="Join group",
+      cap_info_search_share="Search/Share info",
+      cap_buy_product_online="Buy product online",
+      cap_recruit_rent_online="Recruit/Rent online",
+      cap_sell_product_online="Sell product online",
+      cap_install_app="Install app",
+      cap_write_mail="Write mail")
+kable(capacities_data %>%
+  select(
+    starts_with("cap")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  )  %>%
+   mutate(
+      Proportion = round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Capacity") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+## Usage
+```{r}
+replacement = c("usage__google"="Google",
+      "usage__whatsapp"="Whatsapp",
+      "usage__facebook"="Facebook",
+      "usage__youtube"="Youtube",
+      "usage__linkedin"="Linkedin",
+      "usage__instagramm"="Instagram",
+      "usage__tktok"="Tiktok",
+      "usage__snap"="Snapchat",
+      "usage__other_no_agri"="Other no agri",
+      "usage__other_agri"="Other agri",
+      "usage_phone_momo" = "Mobile Money")
+
+kable(usage_data %>%
+  select(
+    starts_with("usage__google"),
+    starts_with("usage__whatsapp"),
+    starts_with("usage__facebook"),
+    starts_with("usage__youtube"),
+    starts_with("usage__linkedin"),
+    starts_with("usage__instagramm"),
+    starts_with("usage__tktok"),
+    starts_with("usage__snap"),
+    starts_with("usage__other_no_agri"),
+    starts_with("usage__other_agri"),
+    starts_with("usage_phone_momo")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+   mutate(
+      Proportion_smartphone = round(Number / 472 * 100, 1),
+      Proportion_total = round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion_total, Proportion_smartphone),format = "latex", booktabs = TRUE, caption = "What applications do you use with your phone?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("platform_1_integrated"="1 group",	
+      "platform_2_integrated"="2 group",	
+      "platform_3_integrated"="3 group",	
+      "platform_4_integrated"="4 group",	
+      "platform_5_integrated"="5 group",	
+      "platform_6_integrated"="6 group",	
+      "platform_7_integrated"="7 group",	
+      "platform_8_integrated"="8 group",	
+      "platform_9_integrated"="9 group",	
+      "platform_10_integrated"="10 group",
+      "platform_others"="> 10 grop")
+
+kable(digital_platform_data %>%
+  select(
+    starts_with("platform_"),
+    -starts_with("platform_total"),
+    -starts_with("platform_family")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+   mutate(
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+
+    select(Answers, Number),format = "latex", booktabs = TRUE, caption = "To how many whatsapp do you group belong ?") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+
+df_long <- usage_data %>%
+  select(matches("^(usage_call_sms|usage_vocal|usage_photos|usage_videos|usage_messages)_")) %>%
+  pivot_longer(cols = everything(),
+               names_to = c("type", "Usage"),
+               names_pattern = "^(usage_call_sms|usage_vocal|usage_photos|usage_videos|usage_messages)_(.+)$",,
+               values_to = "valeur")
+
+# 2. Agréger par dimension et type
+df_aggregated <- df_long %>%
+  group_by(Usage, type) %>%
+  summarise(total_valeur = sum(valeur, na.rm = TRUE), .groups = "drop")
+  
+df_type_totals <- df_aggregated %>%
+  group_by(type) %>%
+  summarise(grand_total_type = sum(total_valeur, na.rm = TRUE), .groups = "drop")
+df_with_col_percentage_long <- df_aggregated %>%
+  left_join(df_type_totals, by = "type") %>%
+  mutate(
+    valeur_et_pct = ifelse(grand_total_type > 0,
+                           paste0(total_valeur, " (", round((total_valeur / grand_total_type) * 100, 1), "%)"),
+                           paste0(total_valeur, " (0.0%)"))
+  ) %>%
+  select(Usage, type, valeur_et_pct) %>%
+  mutate(Usage = Usage %>%
+           str_replace_all("_", " ") %>%
+           str_to_sentence())
+
+table_finale <- df_with_col_percentage_long %>%
+  pivot_wider(names_from = type, values_from = valeur_et_pct, values_fill = "0 (0.0%)") %>%
+  arrange(Usage)
+
+names(table_finale) <- names(table_finale) %>%
+  str_replace_all("_", " ") %>%
+  str_to_sentence()
+
+
+kable(table_finale,
+      format = "latex",
+      booktabs = TRUE,
+      caption = "Difference in digital usage across communication types") %>%
+  kable_styling(latex_options = c("HOLD_position"), full_width = TRUE)
+```
+
+
+
+
+```{r}
+replacement = c("usage_call_sms"="Call/Sms","usage_vocal"="Vocal", "usage_messages"="Messages","usage_photos"="Photos", "usage_videos"="Videos")
+prefixes <- c("usage_call_sms", "usage_vocal", "usage_messages", "usage_photos", "usage_videos")
+
+compte_par_prefixe <- function(prefix) {
+  total <- usage_data %>%
+    select(starts_with(prefix)) %>%
+    mutate(has_1 = rowSums(. == 1, na.rm = TRUE) > 0) %>%
+    summarise(nb = sum(has_1)) %>%
+    pull(nb) 
+  
+  tibble(groupe = prefix, Number = total)
+}
+
+kable(map_dfr(prefixes, compte_par_prefixe)%>%
+   mutate(
+      Answers = str_replace_all(groupe, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    
+    select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Digital usage summary") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+replacement = c("usage_momo_pay"="Payment",
+      "usage_momo_receive"="Receive",
+      "usage_momo_save"="Saving",
+      "usage_momo_tontine"="Tontine",
+      "usage_momo_secur"="Secure payment",
+      "usage_momo_credit"="Credit",
+      "usage_momo_refund"="Refund")
+
+kable(usage_data %>%
+  select(
+    starts_with("usage_momo")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  )%>%
+   mutate(
+      Proportion= round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Financial usage of digital") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+```{r}
+replacement = c( "usage_info_topic_agri_tech"="Agri technique",
+      "usage_info_topic_crop_protect"="Crop protection",
+      "usage_info_topic_price_product"="Price of product",
+      "usage_info_topic_climate_data"="Climate data",
+      "usage_info_topic_market"="Market access",
+      "usage_info_topic_tech"="Technique",
+      "usage_info_topic_finance"="Financial management",
+      "usage_info_topic_land"="Land law",
+      "usage_info_topic_other"="Other")
+
+kable(usage_data %>%
+  select(
+    starts_with("usage_info")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+   mutate(
+      Proportion= round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Usage for information") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("usage_buy_product_seed"="Seed",
+      "usage_buy_product_dropping"="Dropping",
+      "usage_buy_product_fertilizer"="Fertilizer",
+      "usage_buy_product_compost"="Compost",
+      "usage_buy_product_crop_protect"="Plant proctection",
+      "usage_buy_product_material_agri"="Agri material",
+      "usage_buy_product_labour"="Labour",
+      "usage_buy_product_other"="Other")
+kable(usage_data %>%
+  select(
+    starts_with("usage_buy")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+      Proportion= round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Usage for buying product") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("usage_knowledge_agri_quest"="Agri question",
+      "usage_knowledge_whatsapp_quest"="Whatsapp question",
+      "usage_knowledge_agri_video"="Agri videos",
+      "usage_knowledge_search_read"="Read research",
+      "usage_knowledge_acces_social_media"="Social media ",
+      "usage_knowledge_acces_specific_platform"="Specific platform",
+      "usage_knowledge_acces_youtube_search"="Research on youtube",
+      "usage_knowledge_acces_internet_search"="Internet research",
+      "usage_knowledge_acces_sd_card"="Pre-filled SD cards",
+      "usage_knowledge_acces_bluetooth"="Bluetooth file transfer")
+kable(usage_data %>%
+  select(
+    starts_with("usage_knowledge")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+ mutate(
+      Proportion= round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Usage for knowledge") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("usage_group_type_veg_producers"="Vegetable producers",
+      "usage_group_type_corp_member"="Cooperative members",
+      "usage_group_type_assistance"="Knowledge exchange",
+      "usage_group_type_advisor_agri"="Agri advisory",
+      "usage_group_type_other"="Other")
+kable(usage_data %>%
+  select(
+    starts_with("usage_group")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+      Proportion= round(Number / total * 100, 1),
+      Answers = str_replace_all(variable, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    arrange(desc(Number)) %>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Usage for belonging to group") %>%
+  kable_styling(latex_options = c("hold_position"),full_width = TRUE)
+```
+
+```{r}
+replacement = c("usage_momo"="Momo", "usage_market"="Market", "usage_buy"="Buy", "usage_knowledge"="Knowledge", "usage_info"="Information", "usage_group"="Group")
+prefixes <- c("usage_momo", "usage_market","usage_buy", "usage_knowledge", "usage_info", "usage_group")
+
+compte_par_prefixe <- function(prefix) {
+  total <- usage_data %>%
+    select(starts_with(prefix)) %>%
+    mutate(has_1 = rowSums(. == 1, na.rm = TRUE) > 0) %>%
+    summarise(total = sum(has_1)) %>%
+    pull(total) 
+  
+  tibble(groupe = prefix, Number = total)
+}
+
+kable(map_dfr(prefixes, compte_par_prefixe)%>%
+        mutate(
+      Answers = str_replace_all(groupe, replacement),
+      order = if_else(Answers == "0: No answer", 1, 0)
+    ) %>%
+    
+    select(Answers, Number),format = "latex", booktabs = TRUE, caption = "Summary of usage") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+
+```
+
+```{r}
+replacement = c("usage_recruit_rent_temporal"="Temporal recruitment","usage_recruit_rent_machine_rental"="Rent machine")
+kable(usage_data %>%
+  select(
+    starts_with("usage_recruit_rent")
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
+  group_by(variable) %>%
+  summarise(
+    Number = sum(valeur, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Answers = str_replace_all(variable, replacement),
+    Proportion = round(Number / total * 100, 1)
+  )%>%
+    select(Answers, Number, Proportion),format = "latex", booktabs = TRUE, caption = "Usage for recruitment") %>%
+  kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
+```
+
+
+## 4. Theoretical Design
+
+The survey was designed to follow the widely used Digital Divide framework proposed by van Dijk (2020). This framework highlights the steps of the appropriation process of digital devices. The appropriation process starts with a person’s motivation (does a potential user want to use the technology?), followed by their need for physical and material access (can the potential user access the digital technology itself and the additional material resources that are needed to use that technology over time?), and the skills to effectively use the technology (how able is the user to understand and use the technology?),  and finally the actual usage of the technology (how often, for what purpose, with what result?). These four stages influence each other to unleash potential or, on the contrary, increase inequalities. 
+
+The data was collected as part of the Digital Divide project, launched in November 2021 to explore and understand the inequalities that technologies can create or exacerbate. The project's objective was to characterize the uses and non-uses of digital technology in agriculture by studying the socio-economic dimensions of digital development at the level of value chains and farms in West Africa. It intervenes in three value chains in three countries: market gardening in Benin, cocoa farming in Côte d'Ivoire, and the dairy sector in Senegal.
+
+To our knowledge, data on the realities of digital adoption by producers in these areas are rare or non-existent. The collection of this data was intended to provide a better understanding of this adoption process. The survey results will be used to design a digital strategy for agriculture led by producer organizations, technical services, development operators, and research. The collected data could be used by others in related or complementary frameworks.
+
