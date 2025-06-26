@@ -379,19 +379,19 @@ kable(crop_data %>%
 The names of the variables describing access to digital tools in the database begin with "access". The tables below provide data on access to communication technologies and electricity in Benin as well as on the purchase patterns of communication packages.
 
 ```{r}
-replacement = c("access_no_digital"="No digital",
-      "access_phone"="Telephone",
-      "access_tablet"="Tablet",
-      "access_laptop"="Laptop",
-      "access_spotlight"="Spotlight",
-      "access_drone"="Drone")
+replacement = c("access_device_none"="No digital",
+      "access_device_phone"="Telephone",
+      "access_device_tablet"="Tablet",
+      "access_device_laptop"="Laptop",
+      "access_device_spotlight"="Spotlight",
+      "access_device_drone"="Drone")
 kable(access_data %>%
   select(
-    starts_with("access_phone"),
-    starts_with("access_table"),
-    starts_with("access_laptop"),
-    starts_with("access_spotlight"),
-    starts_with("access_no_digital"),
+    starts_with("access_device_phone"),
+    starts_with("access_device_table"),
+    starts_with("access_device_laptop"),
+    starts_with("access_device_spotlight"),
+    starts_with("access_device_none"),
     -starts_with("access_phone_type")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
@@ -418,33 +418,33 @@ kable(access_data %>%
     Number = n(),
     Proportion = round(Number / total * 100, 1)
   )%>%
-    mutate(Answers = str_replace(access_phone_type, "0", "0: No answer"),
+    mutate(Answers = str_replace(access_phone_type, "0", "None"),
             order = if_else(Answers == "0: No answer", 1, 0)) %>%
-    arrange(order, Answers) %>%
+    arrange(desc(Answers)) %>%
   select(Answers, Number),format = "latex", booktabs = TRUE, caption = "What type of phone do you have?") %>%
   kable_styling(latex_options = c("HOLD_position"),full_width = TRUE)
 ```
 
 ```{r}
-replacement = c("access_no_phone_interdiction" = "Interdiction",
-      "access_no_phone_husband" = "Husband autorisation",
-      "access_no_phone_cultur" = "Perception",
-      "access_no_phone_child" = "Child",
-      "access_no_phone_illiterate" = "Illiterate",
-      "access_no_phone_satisfaction" = "Satisfaction",
-      "access_no_phone_internet" = "Internet",
-      "access_no_phone_network" = "Network",
-      "access_no_phone_electricity" = "Electricity",
-      "access_no_phone_money" = "Money",
-      "access_no_phone_usage" = "Can't use",
-      "access_nà_phone_friend" = "Friend",
-      "access_no_phone_danger" = "Dangerous",
-      "access_no_phone_desire" ="Not desire",
-      "access_no_phone_time" = "Time consuming",
-      "access_no_phone_need" ="Don't need")
+replacement = c("access_no_why_interdiction" = "Interdiction",
+      "access_no_why_husband" = "Husband autorisation",
+      "access_no_why_cultur" = "Perception",
+      "access_no_why_child" = "Child",
+      "access_no_why_illiterate" = "Illiterate",
+      "access_no_why_satisfaction" = "Satisfaction",
+      "access_no_why_internet" = "Internet",
+      "access_no_why_network" = "Network",
+      "access_no_why_electricity" = "Electricity",
+      "access_no_why_money" = "Money",
+      "access_no_why_usage" = "Can't use",
+      "access_no_why_friend" = "Friend",
+      "access_no_why_danger" = "Dangerous",
+      "access_no_why_desire" ="Not desire",
+      "access_no_why_time" = "Time consuming",
+      "access_no_why_need" ="Don't need")
 kable(access_data %>%
   select(
-    starts_with("access_no_phone")
+    starts_with("access_no_why")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%
@@ -709,30 +709,30 @@ kable(capacities_data %>%
 
 ## Usage
 ```{r}
-replacement = c("usage__google"="Google",
-      "usage__whatsapp"="Whatsapp",
-      "usage__facebook"="Facebook",
-      "usage__youtube"="Youtube",
-      "usage__linkedin"="Linkedin",
-      "usage__instagramm"="Instagram",
-      "usage__tktok"="Tiktok",
-      "usage__snap"="Snapchat",
-      "usage__other_no_agri"="Other no agri",
-      "usage__other_agri"="Other agri",
+replacement = c("usage_app_google"="Google",
+      "usage_app_whatsapp"="Whatsapp",
+      "usage_app_facebook"="Facebook",
+      "usage_app_youtube"="Youtube",
+      "usage_app_linkedin"="Linkedin",
+      "usage_app_instagramm"="Instagram",
+      "usage_app_tktok"="Tiktok",
+      "usage_app_snap"="Snapchat",
+      "usage_app_other_no_agri"="Other no agri",
+      "usage_app_other_agri"="Other agri",
       "usage_phone_momo" = "Mobile Money")
 
 kable(usage_data %>%
   select(
-    starts_with("usage__google"),
-    starts_with("usage__whatsapp"),
-    starts_with("usage__facebook"),
-    starts_with("usage__youtube"),
-    starts_with("usage__linkedin"),
-    starts_with("usage__instagramm"),
-    starts_with("usage__tktok"),
-    starts_with("usage__snap"),
-    starts_with("usage__other_no_agri"),
-    starts_with("usage__other_agri"),
+    starts_with("usage_app_google"),
+    starts_with("usage_app_whatsapp"),
+    starts_with("usage_app_facebook"),
+    starts_with("usage_app_youtube"),
+    starts_with("usage_app_linkedin"),
+    starts_with("usage_app_instagramm"),
+    starts_with("usage_app_tktok"),
+    starts_with("usage_app_snap"),
+    starts_with("usage_app_other_no_agri"),
+    starts_with("usage_app_other_agri"),
     starts_with("usage_phone_momo")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
@@ -789,10 +789,10 @@ kable(digital_platform_data %>%
 ```{r}
 
 df_long <- usage_data %>%
-  select(matches("^(usage_call_sms|usage_vocal|usage_photos|usage_videos|usage_messages)_")) %>%
+  select(matches("^(usage_agri_call_sms|usage_agri_vocal|usage_agri_photos|usage_agri_videos|usage_agri_messages)_")) %>%
   pivot_longer(cols = everything(),
                names_to = c("type", "Usage"),
-               names_pattern = "^(usage_call_sms|usage_vocal|usage_photos|usage_videos|usage_messages)_(.+)$",,
+               names_pattern = "^(usage_agri_call_sms|usage_agri_vocal|usage_agri_photos|usage_agri_videos|usage_agri_messages)_(.+)$",,
                values_to = "valeur")
 
 # 2. Agréger par dimension et type
@@ -835,8 +835,8 @@ kable(table_finale,
 
 
 ```{r}
-replacement = c("usage_call_sms"="Call/Sms","usage_vocal"="Vocal", "usage_messages"="Messages","usage_photos"="Photos", "usage_videos"="Videos")
-prefixes <- c("usage_call_sms", "usage_vocal", "usage_messages", "usage_photos", "usage_videos")
+replacement = c("usage_agri_call_sms"="Call/Sms","usage_agri_vocal"="Vocal", "usage_agri_messages"="Messages","usage_agri_photos"="Photos", "usage_agri_videos"="Videos")
+prefixes <- c("usage_agri_call_sms", "usage_agri_vocal", "usage_agri_messages", "usage_agri_photos", "usage_agri_videos")
 
 compte_par_prefixe <- function(prefix) {
   total <- usage_data %>%
@@ -890,19 +890,19 @@ kable(usage_data %>%
 
 
 ```{r}
-replacement = c( "usage_info_topic_agri_tech"="Agri technique",
-      "usage_info_topic_crop_protect"="Crop protection",
-      "usage_info_topic_price_product"="Price of product",
-      "usage_info_topic_climate_data"="Climate data",
-      "usage_info_topic_market"="Market access",
-      "usage_info_topic_tech"="Technique",
-      "usage_info_topic_finance"="Financial management",
-      "usage_info_topic_land"="Land law",
-      "usage_info_topic_other"="Other")
+replacement = c( "usage_agri_info_topic_agri_tech"="Agri technique",
+      "usage_agri_info_topic_crop_protect"="Crop protection",
+      "usage_agri_info_topic_price_product"="Price of product",
+      "usage_agri_info_topic_climate_data"="Climate data",
+      "usage_agri_info_topic_market"="Market access",
+      "usage_agri_info_topic_tech"="Technique",
+      "usage_agri_info_topic_finance"="Financial management",
+      "usage_agri_info_topic_land"="Land law",
+      "usage_agri_info_topic_other"="Other")
 
 kable(usage_data %>%
   select(
-    starts_with("usage_info")
+    starts_with("usage_agri_info")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%
@@ -921,17 +921,17 @@ kable(usage_data %>%
 ```
 
 ```{r}
-replacement = c("usage_buy_product_seed"="Seed",
-      "usage_buy_product_dropping"="Dropping",
-      "usage_buy_product_fertilizer"="Fertilizer",
-      "usage_buy_product_compost"="Compost",
-      "usage_buy_product_crop_protect"="Plant proctection",
-      "usage_buy_product_material_agri"="Agri material",
-      "usage_buy_product_labour"="Labour",
-      "usage_buy_product_other"="Other")
+replacement = c("usage_agri_buy_product_seed"="Seed",
+      "usage_agri_buy_product_dropping"="Dropping",
+      "usage_agri_buy_product_fertilizer"="Fertilizer",
+      "usage_agri_buy_product_compost"="Compost",
+      "usage_agri_buy_product_crop_protect"="Plant proctection",
+      "usage_agri_buy_product_material_agri"="Agri material",
+      "usage_agri_buy_product_labour"="Labour",
+      "usage_agri_buy_product_other"="Other")
 kable(usage_data %>%
   select(
-    starts_with("usage_buy")
+    starts_with("usage_agri_buy")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%
@@ -950,19 +950,19 @@ kable(usage_data %>%
 ```
 
 ```{r}
-replacement = c("usage_knowledge_agri_quest"="Agri question",
-      "usage_knowledge_whatsapp_quest"="Whatsapp question",
-      "usage_knowledge_agri_video"="Agri videos",
-      "usage_knowledge_search_read"="Read research",
-      "usage_knowledge_acces_social_media"="Social media ",
-      "usage_knowledge_acces_specific_platform"="Specific platform",
-      "usage_knowledge_acces_youtube_search"="Research on youtube",
-      "usage_knowledge_acces_internet_search"="Internet research",
-      "usage_knowledge_acces_sd_card"="Pre-filled SD cards",
-      "usage_knowledge_acces_bluetooth"="Bluetooth file transfer")
+replacement = c("usage_agri_knowledge_agri_quest"="Agri question",
+      "usage_agri_knowledge_whatsapp_quest"="Whatsapp question",
+      "usage_agri_knowledge_agri_video"="Agri videos",
+      "usage_agri_knowledge_search_read"="Read research",
+      "usage_agri_knowledge_acces_social_media"="Social media ",
+      "usage_agri_knowledge_acces_specific_platform"="Specific platform",
+      "usage_agri_knowledge_acces_youtube_search"="Research on youtube",
+      "usage_agri_knowledge_acces_internet_search"="Internet research",
+      "usage_agri_knowledge_acces_sd_card"="Pre-filled SD cards",
+      "usage_agri_knowledge_acces_bluetooth"="Bluetooth file transfer")
 kable(usage_data %>%
   select(
-    starts_with("usage_knowledge")
+    starts_with("usage_agri_knowledge")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%
@@ -981,14 +981,14 @@ kable(usage_data %>%
 ```
 
 ```{r}
-replacement = c("usage_group_type_veg_producers"="Vegetable producers",
-      "usage_group_type_corp_member"="Cooperative members",
-      "usage_group_type_assistance"="Knowledge exchange",
-      "usage_group_type_advisor_agri"="Agri advisory",
-      "usage_group_type_other"="Other")
+replacement = c("usage_agri_group_type_veg_producers"="Vegetable producers",
+      "usage_agri_group_type_corp_member"="Cooperative members",
+      "usage_agri_group_type_assistance"="Knowledge exchange",
+      "usage_agri_group_type_advisor_agri"="Agri advisory",
+      "usage_agri_group_type_other"="Other")
 kable(usage_data %>%
   select(
-    starts_with("usage_group")
+    starts_with("usage_agri_group")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%
@@ -1007,8 +1007,8 @@ kable(usage_data %>%
 ```
 
 ```{r}
-replacement = c("usage_momo"="Momo", "usage_market"="Market", "usage_buy"="Buy", "usage_knowledge"="Knowledge", "usage_info"="Information", "usage_group"="Group")
-prefixes <- c("usage_momo", "usage_market","usage_buy", "usage_knowledge", "usage_info", "usage_group")
+replacement = c("usage_momo"="Momo", "usage_agri_market"="Market", "usage_agri_buy"="Buy", "usage_agri_knowledge"="Knowledge", "usage_agri_info"="Information", "usage_agri_group"="Group")
+prefixes <- c("usage_momo", "usage_agri_market","usage_agri_buy", "usage_agri_knowledge", "usage_agri_info", "usage_agri_group")
 
 compte_par_prefixe <- function(prefix) {
   total <- usage_data %>%
@@ -1032,10 +1032,10 @@ kable(map_dfr(prefixes, compte_par_prefixe)%>%
 ```
 
 ```{r}
-replacement = c("usage_recruit_rent_temporal"="Temporal recruitment","usage_recruit_rent_machine_rental"="Rent machine")
+replacement = c("usage_agri_recruit_rent_temporal"="Temporal recruitment","usage_agri_recruit_rent_machine_rental"="Rent machine")
 kable(usage_data %>%
   select(
-    starts_with("usage_recruit_rent")
+    starts_with("usage_agri_recruit_rent")
   ) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "valeur") %>%
   group_by(variable) %>%

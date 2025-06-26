@@ -127,8 +127,9 @@ access_data <- access_data %>%
     . == "Point de recharge communautaire" ~ "Community charging station",
     . == "Panneaux solaire" ~ "Solar panels",
     . == "Aucun" ~ "None",
+    . == "Iphone" ~ "Smartphone",
     . == "Smartphone/Androïd" ~ "Smartphone",
-    . == "Téléphone simple" ~ "Simple phone",
+    . == "Téléphone simple" ~ "Basic",
     . == "Groupe électrogène" ~ "Power generator",
     . == "Bon réseau" ~ "Good network",
     . == "Réseau faible" ~ "Weak network",
@@ -163,3 +164,25 @@ write_rds(digital_platform_data, "Desktop/Nicolas Paget/data_paper_Project/filte
 write_rds(usage_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_data.rds")
 write_rds(crop_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
 write_rds(capacities_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
+
+library(dplyr)
+library(writexl)
+
+# Charge ta base
+db <- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/db.rds")
+
+# Crée le dictionnaire
+data_dictionary <- tibble(
+  variable_name = names(db),
+  type = sapply(db, function(x) class(x)[1]),
+  example_value = sapply(db, function(x) {
+    val <- na.omit(x)
+    if (length(val) == 0) return("NA")
+    as.character(val[1])
+  }),
+  n_missing = sapply(db, function(x) sum(is.na(x))),
+  description = ""  # à remplir manuellement si besoin
+)
+
+# Sauvegarde dans un fichier Excel
+write_xlsx(data_dictionary, "data_dictionary.xlsx")
