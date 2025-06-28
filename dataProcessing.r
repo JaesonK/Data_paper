@@ -5,7 +5,8 @@ library(janitor)
 library(dplyr)     
 library(readxl)
 
-data <- read_excel("Desktop/Nicolas Paget/data_paper_Project/2023-10-26-BASE-FINALE-Benin.xlsx")
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+data <- read_excel("2023-10-26-BASE-FINALE-Benin.xlsx")
 View(data)
 
 socio_economic_data <- data %>%
@@ -348,12 +349,12 @@ access_data <- data %>%
 
 
 # Save the filtered data
-write_rds(activity_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
-write_rds(access_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
-write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
-write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
-write_rds(org_struct_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data.rds")
-write_rds(digital_platform_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
-write_rds(usage_cap_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_cap_data.rds")
-write_rds(crop_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
-write_rds(capacities_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
+write_rds(activity_agri_data, "filtered_data/activity_agri_data.rds")
+write_rds(access_data, "filtered_data/access_data.rds")
+write_rds(languages_data, "filtered_data/languages_data.rds")
+write_rds(socio_economic_data, "filtered_data/socio_economic_data.rds")
+write_rds(org_struct_data, "filtered_data/org_struct_data.rds")
+write_rds(digital_platform_data, "digital_platform_data.rds")
+write_rds(usage_cap_data, "filtered_data/usage_cap_data.rds")
+write_rds(crop_data, "filtered_data/crop_data.rds")
+write_rds(capacities_data, "filtered_data/capacities_data.rds")

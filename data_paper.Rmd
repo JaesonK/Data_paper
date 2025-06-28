@@ -95,7 +95,8 @@ library(tidyr)
 library(stringr)
 library(readxl)
 
-db_gardener <- readRDS("~/Desktop/Nicolas Paget/data_paper_Project/filtered_data/db_gardener.rds")
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+db_gardener <- readRDS("filtered_data/db_gardener.rds")
 view(db_gardener)
 ```
 

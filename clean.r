@@ -1,8 +1,9 @@
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Convert Oui/Non into O/1 and fill NA with 0 
 
 #Economic Activities and Agriculture
-activity_agri_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
+activity_agri_data<- readRDS("filtered_data/activity_agri_data.rds")
 activity_agri_data <- activity_agri_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Élevage" ~ "Farming",
@@ -25,12 +26,12 @@ view(activity_agri_data)
 
 
 #Languages data
-languages_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/languages_data.rds")
+languages_data<- readRDS("filtered_data/languages_data.rds")
 languages_data[is.na(languages_data)] <- 0
 view(languages_data)
 
 # Socio Economic data
-socio_economic_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
+socio_economic_data<- readRDS("filtered_data/socio_economic_data.rds")
 socio_economic_data <- socio_economic_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Oui" ~ "1",
@@ -58,7 +59,7 @@ socio_economic_data[is.na(socio_economic_data)] <- 0
 view(socio_economic_data)
 
 #Producer Organizations and Other Structures
-org_struct_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data.rds")
+org_struct_data<- readRDS("filtered_data/org_struct_data.rds")
 org_struct_data <- org_struct_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Oui" ~ "1",
@@ -71,7 +72,7 @@ org_struct_data[is.na(org_struct_data)] <- 0
 view(org_struct_data)
 
 # Digital platforms
-digital_platform_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
+digital_platform_data<- readRDS("filtered_data/digital_platform_data.rds")
 digital_platform_data <- digital_platform_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Oui" ~ "1",
@@ -85,12 +86,12 @@ view(digital_platform_data)
 
 
 #Crops name
-crop_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
+crop_data<- readRDS("filtered_data/crop_data.rds")
 crop_data[is.na(crop_data)] <- 0
 view(crop_data)
 
 #Capacity and usage data
-usage_cap_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_cap_data.rds")
+usage_cap_data<- readRDS("filtered_data/usage_cap_data.rds")
 
 # Set Non = 0 and Oui = 1
 usage_cap_data <- usage_cap_data %>%
@@ -99,8 +100,12 @@ usage_cap_data <- usage_cap_data %>%
     . == "Non" ~ "0",
     TRUE ~ .
   )))
+# Convert characters to numeric
 usage_cap_data <- usage_cap_data %>%
-  mutate(across(where(~ all(.x %in% c("0", "1"))), ~ as.numeric(.x)))
+  mutate(across(
+    where(~ is.character(.x) && all(grepl("^\\d+$", .x) | is.na(.x))), 
+    as.numeric
+  ))
 
 # If cap_* == 0, then all usage_* are set to 0
 usage_cap_data <- usage_cap_data %>%
@@ -169,15 +174,9 @@ usage_cap_data <- usage_cap_data %>%
                 ~ if_else(usage_phone_momo == 0, 0, .),
                 .names = "{.col}"))
 
-# Convert characters to numeric
-usage_cap_data <- usage_cap_data %>%
-  mutate(across(
-    where(~ is.character(.x) && all(grepl("^\\d+$", .x) | is.na(.x))), 
-    as.numeric
-  ))
 
 #Access data
-access_data<- readRDS("Desktop/Nicolas Paget/data_paper_Project/filtered_data/access_data.rds")
+access_data<- readRDS("filtered_data/access_data.rds")
 access_data <- access_data %>%
   mutate(across(where(is.character), ~ case_when(
     . == "Oui" ~ "1",
@@ -216,9 +215,9 @@ view(access_data)
 
 # Save the cleaned data
 
-write_rds(usage_cap_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_cap_data.rds")
+write_rds(usage_cap_data, "filtered_data/usage_cap_data.rds")
 
 bases <- list(socio_economic_data,activitie_agri_data,crop_data, languages_data, org_struct_data, access_data, usage_cap_data, digital_platform_data)
 db_gardener<- reduce(bases, full_join, by = "id")
-write_rds(db_gardener, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/db_gardener.rds")
+write_rds(db_gardener, "filtered_data/db_gardener.rds")
 view(db_gardener)
