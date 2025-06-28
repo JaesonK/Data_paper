@@ -146,9 +146,22 @@ crop_data <- data %>%
 
       # Phone Usage
 
-usage_data <- data %>%
+usage_cap_data <- data %>%
     select(
       id = "_id",
+      cap_call_sms="BC-capacite-Passer des appels, envoyer des SMS",
+      cap_vocal="BC-Savez-vous ?  Envoyer/Ecouter un message vocal",
+      cap_messages="BC-Savez-vous ? Envoyer/Lire un message écrit",
+      cap_photos="BC-Savez-vous ? Envoyer/Prendre une photo",
+      cap_videos="BC-Savez-vous ? Envoyer / Filmer une vidéo",
+      cap_transfer_file="Savez-vous ?  Faire suivre des contenus (messages, audios, photos etc)",
+      cap_join_group_link="BC-Savez-vous ? Intégrer des groupes à partir d’un lien / d’une invitation ?",
+      cap_info_search_share="BC-Savez-vous ? Chercher, suivre ou diffuser de l’information",
+      cap_buy_product_online="BC-Savez-vous ? Acheter des produits",
+      cap_recruit_rent_online="BC-Savez-vous ? Recruter de la main d’œuvre / louer du matériel",
+      cap_sell_product_online="BC-Savez-vous ? Vendre des produits",
+      cap_install_app="BC-Savez-vous ? Installer des applications",
+      cap_write_mail="BC-Savez-vous ? Ecrire un email",
       usage_internet="A2-Utilisez-vous internet (l’enquêté) ?",
       usage_phone_momo="ZO-Utilisez-vous le téléphone pour faire les opérations momo?",
       usage_momo_pay="Si oui, usage momo/Payer",
@@ -333,25 +346,6 @@ access_data <- data %>%
       access_momo="BR-Avez-vous accès au service Momo dans votre village ou localité ?"
     )
 
-      # Capacities
-capacities_data <- data %>%
-    select(
-      id = "_id",
-      cap_call_sms="BC-capacite-Passer des appels, envoyer des SMS",
-      cap_vocal="BC-Savez-vous ?  Envoyer/Ecouter un message vocal",
-      cap_messages="BC-Savez-vous ? Envoyer/Lire un message écrit",
-      cap_photos="BC-Savez-vous ? Envoyer/Prendre une photo",
-      cap_videos="BC-Savez-vous ? Envoyer / Filmer une vidéo",
-      cap_transfer_file="Savez-vous ?  Faire suivre des contenus (messages, audios, photos etc)",
-      cap_join_group_link="BC-Savez-vous ? Intégrer des groupes à partir d’un lien / d’une invitation ?",
-      cap_info_search_share="BC-Savez-vous ? Chercher, suivre ou diffuser de l’information",
-      cap_buy_product_online="BC-Savez-vous ? Acheter des produits",
-      cap_recruit_rent_online="BC-Savez-vous ? Recruter de la main d’œuvre / louer du matériel",
-      cap_sell_product_online="BC-Savez-vous ? Vendre des produits",
-      cap_install_app="BC-Savez-vous ? Installer des applications",
-      cap_write_mail="BC-Savez-vous ? Ecrire un email"
-
-    )
 
 # Save the filtered data
 write_rds(activity_agri_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/activity_agri_data.rds")
@@ -360,6 +354,6 @@ write_rds(languages_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_dat
 write_rds(socio_economic_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/socio_economic_data.rds")
 write_rds(org_struct_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/org_struct_data.rds")
 write_rds(digital_platform_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/digital_platform_data.rds")
-write_rds(usage_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_data.rds")
+write_rds(usage_cap_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/usage_cap_data.rds")
 write_rds(crop_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/crop_data.rds")
 write_rds(capacities_data, "Desktop/Nicolas Paget/data_paper_Project/filtered_data/capacities_data.rds")
